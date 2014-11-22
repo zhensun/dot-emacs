@@ -1,0 +1,31 @@
+#+Title: Emacs Init.d Written in org-mode
+#+Author: Zhen Sun
+#+STARTUP: hidestars
+#+STARTUP: indent
+
+* The Beginning
+
+This is my emacs's init.d file written in org-mode. I'm taking this as
+a practice to literate programming.
+
+* Package management
+
+** On-demand installation of packages
+
+#+BEGIN_SRC emacs-lisp
+  (require 'package)
+  (defun require-package (package &optional min-version no-refresh)
+    "Ask elpa to install given PACKAGE."
+    (if (package-installed-p package min-version)
+        t
+      (if (or (assoc package package-archive-contents) no-refresh)
+          (package-install package)
+        (progn
+          (package-refresh-contents)
+          (require-package package min-version t)))))
+#+END_SRC
+* Setup theme
+
+#+BEGIN_SRC emacs-lisp
+  (load-theme 'tango)
+#+END_SRC
