@@ -45,9 +45,10 @@ Add basic package archives.
                            ("org" . "http://orgmode.org/elpa/")))
 #+END_SRC
 
-Windows version has problem connecting to Maramlaba Repos, we will use
-melpa as main source. On other systems we will use Maramlaba and
-melpa-stable instead.
+Windows version of Emacs has problem with built-in gnutls, causing
+issue connecting to Maramlaba Repos. We will use melpa as main
+source. On other systems we will use Maramlaba and melpa-stable
+instead.
 
 #+BEGIN_SRC emacs-lisp
   (if (string-equal system-type "windows-nt")
