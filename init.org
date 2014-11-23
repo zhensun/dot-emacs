@@ -6,16 +6,18 @@
 * The Beginning
 
 This is my emacs's init.d file written in org-mode. I'm taking this as
-a practice to literate programming.
+a practice for literate programming.
 
-* Load path
+* Enviroment
 
+** Load path
 #+BEGIN_SRC emacs-lisp
   (unless noninteractive
     (message "Loading %s..." load-file-name))
   (add-to-list 'load-path "~/.emacs.d/site-lisp")
   (add-to-list 'load-path "~/.emacs.d/site-lisp/use-package")
 #+END_SRC
+
 * Package management
 
 ** Use ELPA
@@ -24,27 +26,31 @@ a practice to literate programming.
   (require 'package)
 #+END_SRC
 
-** On-demand installation of packages
-
-#+BEGIN_SRC emacs-lisp
-  (defun require-package (package &optional min-version no-refresh)
-    "Ask elpa to install given PACKAGE."
-    (if (package-installed-p package min-version)
-        t
-      (if (or (assoc package package-archive-contents) no-refresh)
-          (package-install package)
-        (progn
-          (package-refresh-contents)
-          (require-package package min-version t)))))
-#+END_SRC
-
 ** Add package repositories
+
+Add basic package archives.
 
 #+BEGIN_SRC emacs-lisp
   (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("marmalade" . "https://marmalade-repo.org/packages/")
-                           ("melpa" . "http://melpa.milkbox.net/packages/")
                            ("org" . "http://orgmode.org/elpa/")))
+#+END_SRC
+
+Windows version has problem connecting to Maramlaba Repos, we will use
+melpa as main source. On other systems we will use Maramlaba and
+melpa-stable instead.
+
+#+BEGIN_SRC emacs-lisp
+  (if (string-equal system-type "windows-nt")
+        (add-to-list 'package-archives
+               '("melpa" . "http://melpa.org/packages/") t)
+    (progn
+      (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+      (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)))
+#+END_SRC
+
+Initialize packages.
+
+#+BEGIN_SRC emacs-lisp
   (package-initialize)
 #+END_SRC
 
@@ -54,9 +60,24 @@ a practice to literate programming.
   (require 'use-package)
 #+END_SRC
 
+* Utilities
+
+** diminish
+
+Hide unnecessary mode names in mode line.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package diminish
+    :ensure diminish)
+#+END_SRC
+
 * Editing
 
 ** Evil Mode
+
+#+BEGIN_QUOTE
+Emacs is a great operating system, lacking only a decent editor.
+#+END_QUOTE
 
 *** Use customized "escape" key
 
@@ -85,10 +106,6 @@ Define a function to use "jk" to as escape.
 
 *** evil 
 
-#+BEGIN_QUOTE
-Emacs is a great operating system, lacking only a decent editor.
-#+END_QUOTE
-
 Enable Vim's modal editing in Emacs.
 
 #+BEGIN_SRC emacs-lisp
@@ -108,10 +125,14 @@ Enable Vim's modal editing in Emacs.
 *** Leader key
 
 #+BEGIN_SRC emacs-lisp
-  (require-package 'evil-leader)
-  (setq evil-leader/in-all-states 1)
-  (global-evil-leader-mode)
-  (evil-leader/set-leader ",")
+  (use-package evil-leader
+    :ensure evil-leader
+    :init
+    (progn
+      (global-evil-leader-mode)
+      (evil-leader/set-leader ","))
+    :config
+    (setq evil-leader/in-all-states 1))
 #+END_SRC
 
 *** evil-org
@@ -119,7 +140,8 @@ Enable Vim's modal editing in Emacs.
 #+BEGIN_SRC emacs-lisp
   (use-package evil-org
     :ensure evil-org
-    :mode ("\\.org\\'" . org-mode))
+    :mode ("\\.org\\'" . org-mode)
+    :diminish evil-org-mode)
 #+END_SRC
 
 * Version Control
