@@ -11,11 +11,21 @@ a practice for literate programming.
 * Enviroment
 
 ** Load path
+
 #+BEGIN_SRC emacs-lisp
   (unless noninteractive
     (message "Loading %s..." load-file-name))
   (add-to-list 'load-path "~/.emacs.d/site-lisp")
   (add-to-list 'load-path "~/.emacs.d/site-lisp/use-package")
+#+END_SRC
+
+** Load custom file
+
+A lot of customizations can be made using Emacs's customize interface.
+
+#+BEGIN_SRC emacs-lisp
+  (setq custom-file "~/.emacs.d/emacs-custom.el")
+  (load custom-file)
 #+END_SRC
 
 * Package management
@@ -69,6 +79,13 @@ Hide unnecessary mode names in mode line.
 #+BEGIN_SRC emacs-lisp
   (use-package diminish
     :ensure diminish)
+#+END_SRC
+
+** htmlize
+
+#+BEGIN_SRC emacs-lisp
+  (use-package htmlize
+    :ensure htmlize)
 #+END_SRC
 
 * Editing
