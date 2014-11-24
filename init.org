@@ -162,6 +162,15 @@ Enable Vim's modal editing in Emacs.
     :diminish evil-org-mode)
 #+END_SRC
 
+** Relative Line Number
+
+#+BEGIN_SRC emacs-lisp
+  (use-package linum-relative
+    :ensure linum-relative
+    :init (global-linum-mode)
+    )
+#+END_SRC
+
 * Version Control
 
 ** Magit
