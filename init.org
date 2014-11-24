@@ -28,6 +28,13 @@ A lot of customizations can be made using Emacs's customize interface.
   (load custom-file)
 #+END_SRC
 
+** Remap M-x
+
+#+BEGIN_SRC emacs-lisp
+  (global-set-key "\C-x\C-m" 'execute-extended-command)
+  (global-set-key "\C-c\C-m" 'execute-extended-command)
+#+END_SRC
+
 * Package management
 
 ** Use ELPA
@@ -140,6 +147,7 @@ Enable Vim's modal editing in Emacs.
       (setq evil-replace-state-cursor '("red" bar))
       (setq evil-operator-state-cursor '("red" hollow))))
 #+END_SRC
+
 *** Leader key
 
 #+BEGIN_SRC emacs-lisp
