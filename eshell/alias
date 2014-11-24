@@ -1,4 +1,4 @@
-alias ff find-file $*
-alias lh ls -rtlh $*
-alias la ls -la $*
+alias ff find-file $1
 alias ll ls -l $*
+alias la ls -la $*
+alias lh ls -rtlh $*
