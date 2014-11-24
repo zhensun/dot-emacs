@@ -1,0 +1,4 @@
+alias ff find-file $*
+alias lh ls -rtlh $*
+alias la ls -la $*
+alias ll ls -l $*
