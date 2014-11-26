@@ -151,14 +151,18 @@ Enable Vim's modal editing in Emacs.
 *** Leader key
 
 #+BEGIN_SRC emacs-lisp
-  (use-package evil-leader
-    :ensure evil-leader
-    :init
-    (progn
-      (global-evil-leader-mode)
-      (evil-leader/set-leader ","))
-    :config
-    (setq evil-leader/in-all-states 1))
+    (use-package evil-leader
+      :ensure evil-leader
+      :init
+        (global-evil-lkkeader-mode)
+      :config
+      (progn
+        (evil-leader/set-leader ",")
+        (evil-leader/set-key
+          "e" 'find-file
+          "b" 'switch-to-buffer
+          "k" 'kill-buffer
+          "!" 'eshell-here)))
 #+END_SRC
 
 *** evil-org
@@ -179,15 +183,68 @@ Enable Vim's modal editing in Emacs.
     )
 #+END_SRC
 
+* Shell
+
+** eshell
+
+*** Start eshell for buffer
+
+#+BEGIN_SRC emacs-lisp
+  (defun eshell-here ()
+    "Opens up a new shell in the directory associated with the
+  current buffer's file. The eshell is renamed to match that
+  directory to make multiple eshell windows easier."
+    (interactive)
+    (let* ((parent (if (buffer-file-name)
+                       (file-name-directory (buffer-file-name))
+                     default-directory))
+           (height (/ (window-total-height) 3))
+           (name   (car (last (split-string parent "/" t)))))
+      (split-window-vertically (- height))
+      (other-window 1)
+      (eshell "new")
+      (rename-buffer (concat "*eshell: " name "*"))
+
+      (insert (concat "ls"))
+      (eshell-send-input)))
+
+  (global-set-key (kbd "C-!") 'eshell-here)
+#+END_SRC
+
+Close eshell with "x".
+
+#+BEGIN_SRC emacs-lisp
+  (defun eshell/x ()
+    (insert "exit")
+    (eshell-send-input)
+    (delete-window))
+#+END_SRC
+
 * Version Control
 
 ** Magit
 
 #+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :ensure magit
-    :diminish magit-auto-revert-mode
-    :bind ("C-x g" . magit-status))
+    (use-package magit
+      :ensure magit
+      :diminish magit-auto-revert-mode
+      :config
+      (evil-leader/set-key
+        "g" 'magit-status))
+#+END_SRC
+
+* Modes
+
+** org
+
+*** org-redmine
+
+#+BEGIN_SRC emacs-lisp
+  (use-package org-redmine
+    :ensure org-redmine
+    :mode ("\\.org\\'" . org-mode)
+    :config
+    (setq org-redmine-uri "http://hfhsroweb04:3000/"))
 #+END_SRC
 
 * Setup theme
@@ -198,3 +255,5 @@ Enable Vim's modal editing in Emacs.
     :init
     (load-theme 'zenburn t))
 #+END_SRC
+
+* Issues
