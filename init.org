@@ -255,5 +255,3 @@ Close eshell with "x".
     :init
     (load-theme 'zenburn t))
 #+END_SRC
-
-* Issues
