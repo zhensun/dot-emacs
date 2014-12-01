@@ -62,7 +62,8 @@ instead.
         (add-to-list 'package-archives
                '("melpa" . "http://melpa.org/packages/") t)
     (progn
-      (add-to-list 'package-archives '("melpa-stable" . "http://stable.melpa.org/packages/") t)
+        (add-to-list 'package-archives
+               '("melpa" . "http://melpa.org/packages/") t)
       (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)))
 #+END_SRC
 
@@ -154,7 +155,7 @@ Enable Vim's modal editing in Emacs.
     (use-package evil-leader
       :ensure evil-leader
       :init
-        (global-evil-lkkeader-mode)
+        (global-evil-leader-mode)
       :config
       (progn
         (evil-leader/set-leader ",")
