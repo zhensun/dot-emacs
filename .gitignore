@@ -3,3 +3,16 @@
 
 # Packaging
 .cask
+/auto-save-list/
+/eshell/alias~
+/eshell/history
+/eshell/lastdir
+/server/
+/tramp
+/url/
+/elpa/
+/#init.el#
+/init.html~
+/#init.org_archive#
+/.#init.org_archive
+/init.org_archive
