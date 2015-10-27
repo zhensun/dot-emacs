@@ -17,6 +17,8 @@ a practice for literate programming.
     (message "Loading %s..." load-file-name))
   (add-to-list 'load-path "~/.emacs.d/site-lisp")
   (add-to-list 'load-path "~/.emacs.d/site-lisp/use-package")
+  (add-to-list 'load-path "~/.emacs.d/lisp")
+
 #+END_SRC
 
 ** Load custom file
@@ -158,10 +160,12 @@ Load RedMine tasks into org-mode.
 
 #+BEGIN_SRC emacs-lisp
   (use-package org-redmine
-    :ensure org-redmine
     :mode ("\\.org\\'" . org-mode)
-    :config
-    (setq org-redmine-uri "http://hfhsroweb04:3000/"))
+    :commands (org-agenda org-agenda-list org-mode)
+    :bind ("<f12>" . org-agenda)
+    :config (progn
+              (load "test-org")
+              (setq org-redmine-uri "http://hfhsroweb04:3000/")))
 #+END_SRC
 
 ** mediawiki
