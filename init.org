@@ -99,100 +99,6 @@ Hide unnecessary mode names in mode line.
 #+END_SRC
 
 * Editing
-
-** Evil Mode
-
-#+BEGIN_QUOTE
-Emacs is a great operating system, lacking only a decent editor.
-#+END_QUOTE
-
-*** Use customized "escape" key
-
-Define a function to use "jk" to as escape.
-
-#+BEGIN_SRC emacs-lisp
-  (defun customize-evil-escape()
-    (progn
-      (define-key evil-insert-state-map "j" #'cofi/maybe-exit)
-      (evil-define-command cofi/maybe-exit ()
-        :repeat change
-        (interactive)
-        (let ((modified (buffer-modified-p)))
-          (insert "j")
-          (let ((evt (read-event (format "Insert %c to exit insert state" ?k)
-                     nil 0.5)))
-            (cond
-             ((null evt) (message ""))
-             ((and (integerp evt) (char-equal evt ?k))
-          (delete-char -1)
-          (set-buffer-modified-p modified)
-          (push 'escape unread-command-events))
-             (t (setq unread-command-events (append unread-command-events
-                                (list evt))))))))))
-#+END_SRC
-
-*** evil 
-
-Enable Vim's modal editing in Emacs.
-
-#+BEGIN_SRC emacs-lisp
-  (use-package evil
-    :ensure evil
-    :init (evil-mode 1)
-    :config
-    (progn
-      (customize-evil-escape)
-      (setq evil-emacs-state-cursor '("red" box))
-      (setq evil-normal-state-cursor '("green" box))
-      (setq evil-visual-state-cursor '("orange" box))
-      (setq evil-insert-state-cursor '("red" bar))
-      (setq evil-replace-state-cursor '("red" bar))
-      (setq evil-operator-state-cursor '("red" hollow))))
-#+END_SRC
-
-*** Leader key
-
-Leader key: ,
-
-Leader key mapping:
-
-| Key | Function         |
-|-----+------------------|
-| e   | find-file        |
-| b   | switch-to-buffer |
-| k   | kill-buffer      |
-
-#+BEGIN_SRC emacs-lisp
-    (use-package evil-leader
-      :ensure evil-leader
-      :init
-        (global-evil-leader-mode)
-      :config
-      (progn
-        (evil-leader/set-leader ",")
-        (evil-leader/set-key
-          "e" 'find-file
-          "b" 'switch-to-buffer
-          "k" 'kill-buffer)))
-#+END_SRC
-
-*** evil-org
-
-#+BEGIN_SRC emacs-lisp
-  (use-package evil-org
-    :ensure evil-org
-    :diminish evil-org-mode)
-#+END_SRC
-
-** Relative Line Number
-
-#+BEGIN_SRC emacs-lisp
-  (use-package linum-relative
-    :ensure linum-relative
-    :init (global-linum-mode)
-    )
-#+END_SRC
-
 * Shell
 
 ** eshell
@@ -239,9 +145,7 @@ Close eshell with "x".
     :ensure magit
     :diminish magit-auto-revert-mode
     :config
-    (evil-leader/set-key "g" 'magit-status)
-    :init
-    (setq magit-last-seen-setup-instructions "1.4.0"))
+    (evil-leader/set-key "g" 'magit-status))
 #+END_SRC
 
 * Modes
@@ -267,6 +171,14 @@ Load RedMine tasks into org-mode.
     :ensure mediawiki)
 #+END_SRC
 
+** Haskell-mode
+
+#+BEGIN_SRC emacs-lisp
+  (use-package haskell-mode
+    :ensure haskell-mode
+    :config
+    (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation))
+#+END_SRC
 * Setup theme
 
 #+BEGIN_SRC emacs-lisp
