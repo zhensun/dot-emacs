@@ -159,7 +159,8 @@ Close eshell with "x".
 Load RedMine tasks into org-mode.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package org-redmine
+  (use-package init-org
+    :ensure org-redmine
     :mode ("\\.org\\'" . org-mode)
     :commands (org-agenda org-agenda-list org-mode)
     :bind ("<f12>" . org-agenda)
