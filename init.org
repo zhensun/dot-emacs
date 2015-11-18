@@ -13,12 +13,9 @@ a practice for literate programming.
 ** Load path
 
 #+BEGIN_SRC emacs-lisp
-  (unless noninteractive
-    (message "Loading %s..." load-file-name))
-  (add-to-list 'load-path "~/.emacs.d/site-lisp")
-  (add-to-list 'load-path "~/.emacs.d/site-lisp/use-package")
-  (add-to-list 'load-path "~/.emacs.d/lisp")
-
+(add-to-list 'load-path "~/.emacs.d/site-lisp")
+(add-to-list 'load-path "~/.emacs.d/site-lisp/use-package")
+(add-to-list 'load-path "~/.emacs.d/lisp")
 #+END_SRC
 
 ** Load custom file
@@ -26,15 +23,15 @@ a practice for literate programming.
 A lot of customizations can be made using Emacs's customize interface.
 
 #+BEGIN_SRC emacs-lisp
-  (setq custom-file "~/.emacs.d/emacs-custom.el")
-  (load custom-file)
+(setq custom-file "~/.emacs.d/emacs-custom.el")
+(load custom-file)
 #+END_SRC
 
 ** Remap M-x
 
 #+BEGIN_SRC emacs-lisp
-  (global-set-key "\C-x\C-m" 'execute-extended-command)
-  (global-set-key "\C-c\C-m" 'execute-extended-command)
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command)
 #+END_SRC
 
 * Package management
@@ -42,7 +39,7 @@ A lot of customizations can be made using Emacs's customize interface.
 ** Use ELPA
 
 #+BEGIN_SRC emacs-lisp
-  (require 'package)
+(require 'package)
 #+END_SRC
 
 ** Add package repositories
@@ -50,8 +47,8 @@ A lot of customizations can be made using Emacs's customize interface.
 Add basic package archives.
 
 #+BEGIN_SRC emacs-lisp
-  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
-                           ("org" . "http://orgmode.org/elpa/")))
+(setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                         ("org" . "http://orgmode.org/elpa/")))
 #+END_SRC
 
 Windows version of Emacs has problem with built-in gnutls, causing
@@ -60,26 +57,25 @@ source. On other systems we will use Maramlaba and melpa-stable
 instead.
 
 #+BEGIN_SRC emacs-lisp
-  (if (string-equal system-type "windows-nt")
-        (add-to-list 'package-archives
-               '("melpa" . "http://melpa.org/packages/") t)
-    (progn
-      
-  (add-to-list 'package-archives
-               '("melpa" . "http://melpa.org/packages/") t)
-      (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)))
+(if (string-equal system-type "windows-nt")
+      (add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+  (progn
+    (add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/") t)
+    (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)))
 #+END_SRC
 
 Initialize packages.
 
 #+BEGIN_SRC emacs-lisp
-  (package-initialize)
+(package-initialize)
 #+END_SRC
 
 ** use-package
 
 #+BEGIN_SRC emacs-lisp
-  (require 'use-package)
+(require 'use-package)
 #+END_SRC
 
 * Utilities
@@ -89,18 +85,25 @@ Initialize packages.
 Hide unnecessary mode names in mode line.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package diminish
-    :ensure diminish)
+(use-package diminish
+  :ensure diminish)
 #+END_SRC
 
 ** htmlize
 
 #+BEGIN_SRC emacs-lisp
-  (use-package htmlize
-    :ensure htmlize)
+(use-package htmlize
+  :ensure htmlize)
 #+END_SRC
 
 * Editing
+
+** Key mapping
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key "\C-w" 'backward-kill-word)
+#+END_SRC
+
 * Shell
 
 ** eshell
@@ -108,34 +111,34 @@ Hide unnecessary mode names in mode line.
 *** Start eshell for buffer
 
 #+BEGIN_SRC emacs-lisp
-  (defun eshell-here ()
-    "Opens up a new shell in the directory associated with the
-  current buffer's file. The eshell is renamed to match that
-  directory to make multiple eshell windows easier."
-    (interactive)
-    (let* ((parent (if (buffer-file-name)
-                       (file-name-directory (buffer-file-name))
-                     default-directory))
-           (height (/ (window-total-height) 3))
-           (name   (car (last (split-string parent "/" t)))))
-      (split-window-vertically (- height))
-      (other-window 1)
-      (eshell "new")
-      (rename-buffer (concat "*eshell: " name "*"))
+(defun eshell-here ()
+  "Opens up a new shell in the directory associated with the
+current buffer's file. The eshell is renamed to match that
+directory to make multiple eshell windows easier."
+  (interactive)
+  (let* ((parent (if (buffer-file-name)
+                     (file-name-directory (buffer-file-name))
+                   default-directory))
+         (height (/ (window-total-height) 3))
+         (name   (car (last (split-string parent "/" t)))))
+    (split-window-vertically (- height))
+    (other-window 1)
+    (eshell "new")
+    (rename-buffer (concat "*eshell: " name "*"))
 
-      (insert (concat "ls"))
-      (eshell-send-input)))
+    (insert (concat "ls"))
+    (eshell-send-input)))
 
-  (global-set-key (kbd "C-!") 'eshell-here)
+(global-set-key (kbd "C-!") 'eshell-here)
 #+END_SRC
 
 Close eshell with "x".
 
 #+BEGIN_SRC emacs-lisp
-  (defun eshell/x ()
-    (insert "exit")
-    (eshell-send-input)
-    (delete-window))
+(defun eshell/x ()
+  (insert "exit")
+  (eshell-send-input)
+  (delete-window))
 #+END_SRC
 
 * Version Control
@@ -143,11 +146,8 @@ Close eshell with "x".
 ** Magit
 
 #+BEGIN_SRC emacs-lisp
-  (use-package magit
-    :ensure magit
-    :diminish magit-auto-revert-mode
-    :config
-    (evil-leader/set-key "g" 'magit-status))
+(use-package magit
+  :ensure magit)
 #+END_SRC
 
 * Modes
@@ -159,40 +159,70 @@ Close eshell with "x".
 Load RedMine tasks into org-mode.
 
 #+BEGIN_SRC emacs-lisp
-  (use-package init-org
-    :ensure org-redmine
-    :mode ("\\.org\\'" . org-mode)
-    :commands (org-agenda org-agenda-list org-mode)
-    :bind ("<f12>" . org-agenda)
-    :config (progn
-              (load "test-org")
-              (setq org-redmine-uri "http://hfhsroweb04:3000/")))
+(use-package org
+  :ensure org-redmine
+  :mode ("\\.org\\'" . org-mode)
+  :commands (org-agenda org-agenda-list org-mode)
+  :bind ("<f12>" . org-agenda)
+  :config (progn
+            (load "init-org")
+            (load "test-org")
+            (setq org-redmine-uri "http://hfhsroweb04:3000/")))
+#+END_SRC
+
+*** org-outlook
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-outlook
+  :ensure org-outlook)
 #+END_SRC
 
 ** mediawiki
 
 #+BEGIN_SRC emacs-lisp
-  (use-package mediawiki
-    :ensure mediawiki)
+(use-package mediawiki
+  :ensure mediawiki)
 #+END_SRC
 
 ** Haskell-mode
 
 #+BEGIN_SRC emacs-lisp
-  (use-package haskell-mode
-    :ensure haskell-mode
-    :config
-    (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation))
+(use-package haskell-mode
+  :ensure haskell-mode
+  :config
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation))
 #+END_SRC
-* Setup theme
+
+** PlantUML
 
 #+BEGIN_SRC emacs-lisp
-  ;(use-package zenburn-theme
-  ;  :ensure zenburn-theme)
-    ;:init
-    ;(load-theme 'zenburn t))
-  (use-package solarized-theme
-    :ensure solarized-theme
-    :init
-    (load-theme 'solarized-dark t))
+;; (use-package puml-mode
+;;   :ensure puml-mode)
+#+END_SRC
+
+** ace-jump-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package ace-jump-mode
+  :ensure t
+  :bind ("C-." . ace-jump-mode))
+#+END_SRC
+
+* Setup theme
+
+** Theme
+
+#+BEGIN_SRC emacs-lisp
+(use-package solarized-theme
+  :ensure solarized-theme
+  :init
+  (load-theme 'tango-dark t))
+#+END_SRC
+
+** smart-mode-line
+
+#+BEGIN_SRC emacs-lisp
+(use-package smart-mode-line
+  :ensure t
+  :init (sml/setup))
 #+END_SRC

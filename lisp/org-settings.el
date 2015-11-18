@@ -114,7 +114,7 @@
  '(org-agenda-default-appointment-duration 60)
  '(org-agenda-files
    (quote
-    ("~/org/diary.org" "~/org/TODO.org" "~/org/church.org" "~/org/refile.org" "~/org/IGSP/IGSP.org")))
+    ("~/Documents/radonc.org" "~/org/refile.org")))
  '(org-agenda-fontify-priorities t)
  '(org-agenda-include-diary t)
  '(org-agenda-log-mode-add-notes t)
@@ -216,7 +216,7 @@ SCHEDULED: %t
 %i" :prepend t :empty-lines 1))))
  '(org-clock-idle-time 10)
  '(org-clock-in-resume t)
- '(org-clock-in-switch-to-state "STARTED")
+ '(org-clock-in-switch-to-state "NEXT")
  '(org-clock-into-drawer "LOGBOOK")
  '(org-clock-persist
    (quote history))
@@ -246,7 +246,7 @@ SCHEDULED: %t
  '(org-log-done
    (quote note))
  '(org-outline-path-complete-in-steps nil)
- '(org-plantuml-jar-path "/usr/local/bin/plantuml.jar")
+ '(org-plantuml-jar-path "~/.emacs.d/lisp/plantuml.jar")
  '(org-refile-allow-creating-parent-nodes
    (quote confirm))
  '(org-refile-targets

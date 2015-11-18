@@ -5,7 +5,7 @@
                             ("@errand" . ?e)
                             ("@office" . ?o)
                             ("@home" . ?H)
-                            (:endgroup)
+                           (:endgroup)
                             ("WAITING" . ?w)
                             ("HOLD" . ?h)
                             ("PERSONAL" . ?P)
@@ -48,7 +48,7 @@
                             (org-agenda-skip-function 'bh/skip-non-projects)
                             (org-agenda-sorting-strategy
                              '(priority-down category-keep))))
-                (tags-todo "-CANCELLED/!NEXT"
+		(tags-todo "-CANCELLED/!NEXT"
                            ((org-agenda-overriding-header "Project Next Tasks")
                             (org-agenda-skip-function 'bh/skip-projects-and-habits-and-single-tasks)
                             (org-tags-match-list-sublevels t)
@@ -177,8 +177,6 @@ Callers of this function already widen the buffer view."
       (setq org-tags-match-list-sublevels t)
     (setq org-tags-match-list-sublevels nil))
   nil)
-
-(defvar bh/hide-scheduled-and-waiting-next-tasks t)
 
 (defun bh/toggle-next-task-display ()
   (interactive)
@@ -423,7 +421,9 @@ as the default task."
           (when bh/keep-clock-running
             (bh/clock-in-default-task)))))))
 
-(defvar bh/organization-task-id "DC4BF204-9484-4F0C-9C48-B515311FBE29")
+(defvar bh/organization-task-id "b29a854d-953d-457c-86b5-6c903a1438cd")
+
+(defvar bh/hide-scheduled-and-waiting-next-tasks t)
 
 (defun bh/clock-in-organization-task-as-default ()
   (interactive)
@@ -567,8 +567,8 @@ so change the default 'F' binding in the agenda to allow both"
     (org-agenda-redo)
     (beginning-of-buffer)))
 
-(add-hook 'org-agenda-mode-hook
-          '(lambda () (org-defkey org-agenda-mode-map "F" 'bh/restrict-to-file-or-follow))
+(add-hook 'org-agenda-mode-hook 
+         '(lambda () (org-defkey org-agenda-mode-map "F" 'bh/restrict-to-file-or-follow))
           'append)
 
 (defun bh/narrow-to-org-subtree ()
