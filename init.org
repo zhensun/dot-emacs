@@ -170,13 +170,6 @@ Load RedMine tasks into org-mode.
             (setq org-redmine-uri "http://hfhsroweb04:3000/")))
 #+END_SRC
 
-*** org-outlook
-
-#+BEGIN_SRC emacs-lisp
-(use-package org-outlook
-  :ensure org-outlook)
-#+END_SRC
-
 ** mediawiki
 
 #+BEGIN_SRC emacs-lisp
