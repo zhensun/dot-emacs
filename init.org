@@ -209,6 +209,16 @@ Load RedMine tasks into org-mode.
   :mode ("\\.ledger\\'" . ledger-mode))
 #+END_SRC
 
+** multiple-cursors
+
+#+BEGIN_SRC emacs-lisp
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
+#+END_SRC
 * Setup theme
 
 ** Theme
@@ -217,7 +227,7 @@ Load RedMine tasks into org-mode.
 (use-package solarized-theme
   :ensure solarized-theme
   :init
-  (load-theme 'tango-dark t))
+  (load-theme 'solarized-dark t))
 #+END_SRC
 
 ** smart-mode-line
