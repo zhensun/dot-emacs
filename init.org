@@ -154,9 +154,7 @@ Close eshell with "x".
 
 ** org
 
-*** org-redmine
-
-Load RedMine tasks into org-mode.
+*** org-mode
 
 #+BEGIN_SRC emacs-lisp
 (use-package org
@@ -168,6 +166,17 @@ Load RedMine tasks into org-mode.
             (load "init-org")
             (load "test-org")
             (setq org-redmine-uri "http://hfhsroweb04:3000/")))
+#+END_SRC
+
+*** org-redmine
+
+Load RedMine tasks into org-mode.
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-redmine
+  :ensure org-redmine
+  :mode ("\\.org\\'" . org-mode)
+  :config (setq org-redmine-uri "http://hfhsroweb04:3000/"))
 #+END_SRC
 
 ** mediawiki
@@ -205,7 +214,7 @@ Load RedMine tasks into org-mode.
 
 #+BEGIN_SRC emacs-lisp
 (use-package ledger-mode
-  :ensure t
+  :ensure 
   :mode ("\\.ledger\\'" . ledger-mode))
 #+END_SRC
 
@@ -219,6 +228,28 @@ Load RedMine tasks into org-mode.
          ("C-<" . mc/mark-previous-like-this)
          ("C-c C-<" . mc/mark-all-like-this)))
 #+END_SRC
+
+** ido
+
+*** ido-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package ido
+  :config (progn
+            (ido-mode 1)
+            (ido-everywhere 1)))
+#+END_SRC
+
+*** ido-ubiquitous
+
+ido-ubiquitous will enable ido-mode in many places. (e.g. c-h f)
+
+#+BEGIN_SRC emacs-lisp
+(use-package ido-ubiquitous
+  :ensure t
+  :config (ido-ubiquitous-mode 1))
+#+END_SRC
+
 * Setup theme
 
 ** Theme
@@ -235,5 +266,5 @@ Load RedMine tasks into org-mode.
 #+BEGIN_SRC emacs-lisp
 (use-package smart-mode-line
   :ensure t
-  :init (sml/setup))
+  :config (sml/setup))
 #+END_SRC
