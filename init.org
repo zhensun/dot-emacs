@@ -160,7 +160,8 @@ Close eshell with "x".
 
 #+BEGIN_SRC emacs-lisp
 (use-package magit
-  :ensure magit)
+  :ensure magit
+  :bind ("C-x g" . magit-status))
 #+END_SRC
 
 * Modes
