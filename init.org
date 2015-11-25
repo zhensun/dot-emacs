@@ -98,6 +98,11 @@ Hide unnecessary mode names in mode line.
 
 * Editing
 
+** Turn on auto-fill-mode for text-mode
+
+#+BEGIN_SRC emacs-lisp
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
+#+END_SRC
 ** Key mapping
 
 #+BEGIN_SRC emacs-lisp
@@ -264,7 +269,7 @@ ido-ubiquitous will enable ido-mode in many places. (e.g. c-h f)
 
 #+BEGIN_SRC emacs-lisp
 (use-package solarized-theme
-  :ensure solarized-theme
+  :ensure t
   :init
   (load-theme 'solarized-dark t))
 #+END_SRC
