@@ -1,16 +1,9 @@
-
-(unless noninteractive
-  (message "Loading %s..." load-file-name))
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
-(add-to-list 'load-path "~/.emacs.d/site-lisp/use-package")
-
-(setq custom-file "~/.emacs.d/emacs-custom.el")
-(load custom-file)
-
-(global-set-key "\C-x\C-m" 'execute-extended-command)
-(global-set-key "\C-c\C-m" 'execute-extended-command)
+;;(add-to-list 'load-path "~/.emacs.d/site-lisp/use-package")
+(add-to-list 'load-path "~/.emacs.d/lisp")
 
 (require 'package)
+(setq package-enable-at-startup nil)
 
 (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
                          ("org" . "http://orgmode.org/elpa/")))
@@ -19,14 +12,25 @@
       (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
   (progn
-    
-(add-to-list 'package-archives
+    (add-to-list 'package-archives
              '("melpa" . "http://melpa.org/packages/") t)
     (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)))
 
 (package-initialize)
 
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 (require 'use-package)
+
+(setq custom-file "~/.emacs.d/emacs-custom.el")
+(load custom-file)
+
+(use-package initsplit
+  :ensure t)
+
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command)
 
 (use-package diminish
   :ensure diminish)
@@ -34,58 +38,13 @@
 (use-package htmlize
   :ensure htmlize)
 
-(defun customize-evil-escape()
-  (progn
-    (define-key evil-insert-state-map "j" #'cofi/maybe-exit)
-    (evil-define-command cofi/maybe-exit ()
-      :repeat change
-      (interactive)
-      (let ((modified (buffer-modified-p)))
-        (insert "j")
-        (let ((evt (read-event (format "Insert %c to exit insert state" ?k)
-                   nil 0.5)))
-          (cond
-           ((null evt) (message ""))
-           ((and (integerp evt) (char-equal evt ?k))
-        (delete-char -1)
-        (set-buffer-modified-p modified)
-        (push 'escape unread-command-events))
-           (t (setq unread-command-events (append unread-command-events
-                              (list evt))))))))))
+(add-hook 'text-mode-hook 'turn-on-auto-fill)
 
-(use-package evil
-  :ensure evil
-  :init (evil-mode 1)
-  :config
-  (progn
-    (customize-evil-escape)
-    (setq evil-emacs-state-cursor '("red" box))
-    (setq evil-normal-state-cursor '("green" box))
-    (setq evil-visual-state-cursor '("orange" box))
-    (setq evil-insert-state-cursor '("red" bar))
-    (setq evil-replace-state-cursor '("red" bar))
-    (setq evil-operator-state-cursor '("red" hollow))))
+(global-set-key "\C-w" 'backward-kill-word)
 
-(use-package evil-leader
-  :ensure evil-leader
-  :init
-    (global-evil-leader-mode)
-  :config
-  (progn
-    (evil-leader/set-leader ",")
-    (evil-leader/set-key
-      "e" 'find-file
-      "b" 'switch-to-buffer
-      "k" 'kill-buffer)))
-
-(use-package evil-org
-  :ensure evil-org
-  :diminish evil-org-mode)
-
-(use-package linum-relative
-  :ensure linum-relative
-  :init (global-linum-mode)
-  )
+(use-package expand-region
+  :ensure t
+  :bind ("C-=" . er/expand-region))
 
 (defun eshell-here ()
   "Opens up a new shell in the directory associated with the
@@ -114,26 +73,63 @@ directory to make multiple eshell windows easier."
 
 (use-package magit
   :ensure magit
-  :diminish magit-auto-revert-mode
-  :config
-  (evil-leader/set-key "g" 'magit-status)
-  :init
-  (setq magit-last-seen-setup-instructions "1.4.0"))
+  :bind ("C-x g" . magit-status))
+
+(use-package org
+  :ensure org-redmine
+  :mode ("\\.org\\'" . org-mode)
+  :commands (org-agenda org-agenda-list org-mode)
+  :bind ("<f12>" . org-agenda)
+  :config (progn
+            (load "init-org")
+            (load "test-org")
+            (setq org-redmine-uri "http://hfhsroweb04:3000/")))
 
 (use-package org-redmine
   :ensure org-redmine
   :mode ("\\.org\\'" . org-mode)
-  :config
-  (setq org-redmine-uri "http://hfhsroweb04:3000/"))
+  :config (setq org-redmine-uri "http://hfhsroweb04:3000/"))
 
 (use-package mediawiki
   :ensure mediawiki)
 
-;(use-package zenburn-theme
-;  :ensure zenburn-theme)
-  ;:init
-  ;(load-theme 'zenburn t))
+(use-package haskell-mode
+  :ensure haskell-mode
+  :config
+  (add-hook 'haskell-mode-hook 'turn-on-haskell-indentation))
+
+;; (use-package puml-mode
+;;   :ensure puml-mode)
+
+(use-package ace-jump-mode
+  :ensure t
+  :bind ("C-." . ace-jump-mode))
+
+(use-package ledger-mode
+  :ensure 
+  :mode ("\\.ledger\\'" . ledger-mode))
+
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
+
+(use-package ido
+  :config (progn
+            (ido-mode 1)
+            (ido-everywhere 1)))
+
+(use-package ido-ubiquitous
+  :ensure t
+  :config (ido-ubiquitous-mode 1))
+
 (use-package solarized-theme
-  :ensure solarized-theme
+  :ensure t
   :init
-  (load-theme 'solarized-dark t))
+  (load-theme 'leuven t))
+
+(use-package smart-mode-line
+  :ensure t
+  :config (sml/setup))

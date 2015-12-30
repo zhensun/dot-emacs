@@ -10,39 +10,24 @@ a practice for literate programming.
 
 * Enviroment
 
-** Load path
+** Paths
+*** Load path
 
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
-(add-to-list 'load-path "~/.emacs.d/site-lisp/use-package")
+;;(add-to-list 'load-path "~/.emacs.d/site-lisp/use-package")
 (add-to-list 'load-path "~/.emacs.d/lisp")
 #+END_SRC
 
-** Load custom file
-
-A lot of customizations can be made using Emacs's customize interface.
-
-#+BEGIN_SRC emacs-lisp
-(setq custom-file "~/.emacs.d/emacs-custom.el")
-(load custom-file)
-#+END_SRC
-
-** Remap M-x
-
-#+BEGIN_SRC emacs-lisp
-(global-set-key "\C-x\C-m" 'execute-extended-command)
-(global-set-key "\C-c\C-m" 'execute-extended-command)
-#+END_SRC
-
-* Package management
-
-** Use ELPA
+** Package management
+*** Use ELPA
 
 #+BEGIN_SRC emacs-lisp
 (require 'package)
+(setq package-enable-at-startup nil)
 #+END_SRC
 
-** Add package repositories
+*** Add package repositories
 
 Add basic package archives.
 
@@ -72,10 +57,36 @@ Initialize packages.
 (package-initialize)
 #+END_SRC
 
-** use-package
+*** use-package
 
 #+BEGIN_SRC emacs-lisp
-(require 'use-package)
+  (unless (package-installed-p 'use-package)
+    (package-refresh-contents)
+    (package-install 'use-package))
+  (require 'use-package)
+#+END_SRC
+
+** Load custom file
+
+A lot of customizations can be made using Emacs's customize interface.
+
+#+BEGIN_SRC emacs-lisp
+(setq custom-file "~/.emacs.d/emacs-custom.el")
+(load custom-file)
+#+END_SRC
+
+Use init-split to manage settings
+
+#+BEGIN_SRC emacs-lisp
+  (use-package initsplit
+    :ensure t)
+#+END_SRC
+
+** Remap M-x
+
+#+BEGIN_SRC emacs-lisp
+(global-set-key "\C-x\C-m" 'execute-extended-command)
+(global-set-key "\C-c\C-m" 'execute-extended-command)
 #+END_SRC
 
 * Utilities
@@ -272,7 +283,7 @@ ido-ubiquitous will enable ido-mode in many places. (e.g. c-h f)
 (use-package solarized-theme
   :ensure t
   :init
-  (load-theme 'solarized-dark t))
+  (load-theme 'leuven t))
 #+END_SRC
 
 ** smart-mode-line

@@ -11,65 +11,65 @@
      ("h" "Habits" tags-todo "STYLE=\"habit\""
       ((org-agenda-overriding-header "Habits")
        (org-agenda-sorting-strategy
-        (quote
-         (todo-state-down effort-up category-keep)))))
+	(quote
+	 (todo-state-down effort-up category-keep)))))
      (" " "Agenda"
       ((agenda "" nil)
        (tags "REFILE"
-             ((org-agenda-overriding-header "Tasks to Refile")
-              (org-tags-match-list-sublevels nil)))
+	     ((org-agenda-overriding-header "Tasks to Refile")
+	      (org-tags-match-list-sublevels nil)))
        (tags-todo "-CANCELLED/!"
-                  ((org-agenda-overriding-header "Stuck Projects")
-                   (org-agenda-skip-function
-                    (quote bh/skip-non-stuck-projects))
-                   (org-agenda-sorting-strategy
-                    (quote
-                     (priority-down category-keep)))))
+		  ((org-agenda-overriding-header "Stuck Projects")
+		   (org-agenda-skip-function
+		    (quote bh/skip-non-stuck-projects))
+		   (org-agenda-sorting-strategy
+		    (quote
+		     (priority-down category-keep)))))
        (tags-todo "-HOLD-CANCELLED/!"
-                  ((org-agenda-overriding-header "Projects")
-                   (org-agenda-skip-function
-                    (quote bh/skip-non-projects))
-                   (org-agenda-sorting-strategy
-                    (quote
-                     (priority-down category-keep)))))
+		  ((org-agenda-overriding-header "Projects")
+		   (org-agenda-skip-function
+		    (quote bh/skip-non-projects))
+		   (org-agenda-sorting-strategy
+		    (quote
+		     (priority-down category-keep)))))
        (tags-todo "-CANCELLED/!NEXT"
-                  ((org-agenda-overriding-header "Project Next Tasks")
-                   (org-agenda-skip-function
-                    (quote bh/skip-projects-and-habits-and-single-tasks))
-                   (org-tags-match-list-sublevels t)
-                   (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
-                   (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
-                   (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
-                   (org-agenda-sorting-strategy
-                    (quote
-                     (priority-down todo-state-down effort-up category-keep)))))
+		  ((org-agenda-overriding-header "Project Next Tasks")
+		   (org-agenda-skip-function
+		    (quote bh/skip-projects-and-habits-and-single-tasks))
+		   (org-tags-match-list-sublevels t)
+		   (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
+		   (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
+		   (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
+		   (org-agenda-sorting-strategy
+		    (quote
+		     (priority-down todo-state-down effort-up category-keep)))))
        (tags-todo "-REFILE-CANCELLED-WAITING-Bill/!"
-                  ((org-agenda-overriding-header
-                    (if
-                        (marker-buffer org-agenda-restrict-begin)
-                        "Project Subtasks" "Standalone Tasks"))
-                   (org-agenda-skip-function
-                    (quote bh/skip-project-tasks-maybe))
-                   (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
-                   (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
-                   (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
-                   (org-agenda-sorting-strategy
-                    (quote
-                     (category-keep)))))
+		  ((org-agenda-overriding-header
+		    (if
+			(marker-buffer org-agenda-restrict-begin)
+			"Project Subtasks" "Standalone Tasks"))
+		   (org-agenda-skip-function
+		    (quote bh/skip-project-tasks-maybe))
+		   (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
+		   (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
+		   (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
+		   (org-agenda-sorting-strategy
+		    (quote
+		     (category-keep)))))
        (tags-todo "-CANCELLED+WAITING/!"
-                  ((org-agenda-overriding-header "Waiting and Postponed Tasks")
-                   (org-agenda-skip-function
-                    (quote bh/skip-stuck-projects))
-                   (org-tags-match-list-sublevels nil)
-                   (org-agenda-todo-ignore-scheduled
-                    (quote future))
-                   (org-agenda-todo-ignore-deadlines
-                    (quote future))))
+		  ((org-agenda-overriding-header "Waiting and Postponed Tasks")
+		   (org-agenda-skip-function
+		    (quote bh/skip-stuck-projects))
+		   (org-tags-match-list-sublevels nil)
+		   (org-agenda-todo-ignore-scheduled
+		    (quote future))
+		   (org-agenda-todo-ignore-deadlines
+		    (quote future))))
        (tags "-REFILE/"
-             ((org-agenda-overriding-header "Tasks to Archive")
-              (org-agenda-skip-function
-               (quote bh/skip-non-archivable-tasks))
-              (org-tags-match-list-sublevels nil))))
+	     ((org-agenda-overriding-header "Tasks to Archive")
+	      (org-agenda-skip-function
+	       (quote bh/skip-non-archivable-tasks))
+	      (org-tags-match-list-sublevels nil))))
       nil)
      ("r" "Tasks to Refile" tags "REFILE"
       ((org-agenda-overriding-header "Tasks to Refile")
@@ -77,50 +77,46 @@
      ("#" "Stuck Projects" tags-todo "-CANCELLED/!"
       ((org-agenda-overriding-header "Stuck Projects")
        (org-agenda-skip-function
-        (quote bh/skip-non-stuck-projects))))
+	(quote bh/skip-non-stuck-projects))))
      ("n" "Next Tasks" tags-todo "-WAITING-CANCELLED/!NEXT"
       ((org-agenda-overriding-header "Next Tasks")
        (org-agenda-skip-function
-        (quote bh/skip-projects-and-habits-and-single-tasks))
+	(quote bh/skip-projects-and-habits-and-single-tasks))
        (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
        (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
        (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
        (org-tags-match-list-sublevels t)
        (org-agenda-sorting-strategy
-        (quote
-         (todo-state-down effort-up category-keep)))))
+	(quote
+	 (todo-state-down effort-up category-keep)))))
      ("R" "Tasks" tags-todo "-REFILE-CANCELLED/!-HOLD-WAITING"
       ((org-agenda-overriding-header "Tasks")
        (org-agenda-skip-function
-        (quote bh/skip-project-tasks-maybe))
+	(quote bh/skip-project-tasks-maybe))
        (org-agenda-sorting-strategy
-        (quote
-         (category-keep)))))
+	(quote
+	 (category-keep)))))
      ("p" "Projects" tags-todo "-HOLD-CANCELLED/!"
       ((org-agenda-overriding-header "Projects")
        (org-agenda-skip-function
-        (quote bh/skip-non-projects))
+	(quote bh/skip-non-projects))
        (org-agenda-sorting-strategy
-        (quote
-         (category-keep)))))
+	(quote
+	 (category-keep)))))
      ("w" "Waiting Tasks" tags-todo "-CANCELLED+WAITING/!"
       ((org-agenda-overriding-header "Waiting and Postponed tasks"))
       (org-tags-match-list-sublevels nil))
      ("A" "Tasks to Archive" tags "-REFILE/"
       ((org-agenda-overriding-header "Tasks to Archive")
        (org-agenda-skip-function
-        (quote bh/skip-non-archivable-tasks))
+	(quote bh/skip-non-archivable-tasks))
        (org-tags-match-list-sublevels nil))))))
  '(org-agenda-default-appointment-duration 60)
- '(org-agenda-files
-   (quote
-    ("~/Documents/radonc.org" "~/org/refile.org")))
+ '(org-agenda-files (quote ("~/Documents/radonc.org" "~/org/refile.org")))
  '(org-agenda-fontify-priorities t)
  '(org-agenda-include-diary t)
  '(org-agenda-log-mode-add-notes t)
- '(org-agenda-log-mode-items
-   (quote
-    (closed clock state)))
+ '(org-agenda-log-mode-items (quote (closed clock state)))
  '(org-agenda-ndays 1)
  '(org-agenda-prefix-format
    (quote
@@ -141,12 +137,9 @@
      (search category-keep))))
  '(org-agenda-start-on-weekday nil)
  '(org-agenda-start-with-log-mode nil)
- '(org-agenda-text-search-extra-files
-   (quote
-    (agenda-archives)))
+ '(org-agenda-text-search-extra-files (quote (agenda-archives)))
  '(org-agenda-use-time-grid t)
- '(org-attach-method
-   (quote mv))
+ '(org-attach-method (quote mv))
  '(org-babel-load-languages
    (quote
     ((emacs-lisp . t)
@@ -218,8 +211,7 @@ SCHEDULED: %t
  '(org-clock-in-resume t)
  '(org-clock-in-switch-to-state "NEXT")
  '(org-clock-into-drawer "LOGBOOK")
- '(org-clock-persist
-   (quote history))
+ '(org-clock-persist (quote history))
  '(org-completion-use-ido t)
  '(org-cycle-global-at-bob t)
  '(org-deadline-warning-days 30)
@@ -227,9 +219,7 @@ SCHEDULED: %t
  '(org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.9/libexec/ditaa0_9.jar")
  '(org-edit-src-content-indentation 0)
  '(org-enforce-todo-dependencies t)
- '(org-export-backends
-   (quote
-    (ascii beamer html icalendar latex md)))
+ '(org-export-backends (quote (ascii beamer html icalendar latex md)))
  '(org-export-creator-info nil)
  '(org-export-date-timestamp-format "%Y-%m-%d")
  '(org-export-kill-product-buffer-when-displayed t)
@@ -243,12 +233,12 @@ SCHEDULED: %t
  '(org-latex-pdf-process
    (quote
     ("pdflatex -interaction nonstopmode -output-directory %o %f" "pdflatex -interaction nonstopmode -output-directory %o %f" "pdflatex -interaction nonstopmode -output-directory %o %f")))
- '(org-log-done
-   (quote note))
+ '(org-log-done (quote note))
  '(org-outline-path-complete-in-steps nil)
+ '(org-outlook-location "C:\\PROGRA~2\\MICROS~2\\OFFICE14\\OUTLOOK.EXE")
  '(org-plantuml-jar-path "~/.emacs.d/lisp/plantuml.jar")
- '(org-refile-allow-creating-parent-nodes
-   (quote confirm))
+ '(org-protocol-outlook-default-template-key (quote z))
+ '(org-refile-allow-creating-parent-nodes (quote confirm))
  '(org-refile-targets
    (quote
     ((nil :maxlevel . 9)
@@ -272,7 +262,7 @@ SCHEDULED: %t
      ("WORK" . 87)
      ("FARM" . 70)
      ("ORG" . 79)
-     ("NORANG" . 78)
+     ("CorpIT" . 67)
      ("crypt" . 69)
      ("NOTE" . 110)
      ("CANCELLED" . 99)
@@ -314,9 +304,7 @@ SCHEDULED: %t
       ("WAITING")
       ("CANCELLED")
       ("HOLD")))))
- '(org-use-property-inheritance
-   (quote
-    ("AREA")))
+ '(org-use-property-inheritance (quote ("AREA")))
  '(org-use-speed-commands t)
  '(org-use-sub-superscripts "{}")
  '(org-use-tag-inheritance t)
