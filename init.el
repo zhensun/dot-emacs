@@ -32,11 +32,34 @@
 (global-set-key "\C-x\C-m" 'execute-extended-command)
 (global-set-key "\C-c\C-m" 'execute-extended-command)
 
+(winner-mode 1)
+
 (use-package diminish
   :ensure diminish)
 
 (use-package htmlize
   :ensure htmlize)
+
+;(use-package ido
+;  :config (progn
+;            (ido-mode 1)
+;            (ido-everywhere 1)))
+
+;(use-package ido-ubiquitous
+;  :ensure t
+;  :config (ido-ubiquitous-mode 1))
+
+(use-package counsel
+  :ensure t)
+
+(use-package swiper
+  :ensure t
+  :config (progn
+            (ivy-mode 1)
+            (setq ivy-use-virtual-buffers t)
+            (setq magit-completing-read-function 'ivy-completing-read))
+  :bind (("C-s" . swiper)
+         ("C-c C-r" . ivy-resume)))
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
@@ -45,6 +68,17 @@
 (use-package expand-region
   :ensure t
   :bind ("C-=" . er/expand-region))
+
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
+
+(use-package ace-jump-mode
+  :ensure t
+  :bind ("C-." . ace-jump-mode))
 
 (defun eshell-here ()
   "Opens up a new shell in the directory associated with the
@@ -101,31 +135,15 @@ directory to make multiple eshell windows easier."
 ;; (use-package puml-mode
 ;;   :ensure puml-mode)
 
-(use-package ace-jump-mode
-  :ensure t
-  :bind ("C-." . ace-jump-mode))
-
 (use-package ledger-mode
   :ensure 
   :mode ("\\.ledger\\'" . ledger-mode))
 
-(use-package multiple-cursors
+(use-package csharp-mode
   :ensure t
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-         ("C->" . mc/mark-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)))
+  :mode ("\\.cs\\'" . csharp-mode))
 
-(use-package ido
-  :config (progn
-            (ido-mode 1)
-            (ido-everywhere 1)))
-
-(use-package ido-ubiquitous
-  :ensure t
-  :config (ido-ubiquitous-mode 1))
-
-(use-package solarized-theme
+(use-package leuven-theme
   :ensure t
   :init
   (load-theme 'leuven t))

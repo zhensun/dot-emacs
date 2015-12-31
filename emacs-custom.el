@@ -88,6 +88,7 @@ static char *gnus-pointer[] = {
    (quote
     (("\\`\\(gnus\\|nn\\|message\\|mail\\|mm-\\|smtp\\|send-mail\\|check-mail\\|spam\\|sc-\\)" "~/.emacs.d/lisp/gnus-settings.el" nil nil)
      ("\\`\\(org-\\|deft-\\|cfw:\\)" "~/.emacs.d/lisp/org-settings.el" nil nil))))
+ '(ivy-on-del-error-function (quote ignore))
  '(magit-diff-use-overlays nil)
  '(magit-use-overlays nil)
  '(nrepl-message-colors

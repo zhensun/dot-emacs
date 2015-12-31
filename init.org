@@ -91,6 +91,13 @@ Use init-split to manage settings
 
 * Utilities
 
+** winner-mode
+
+Undo window layout changes.
+
+#+BEGIN_SRC emacs-lisp
+(winner-mode 1)
+#+END_SRC
 ** diminish
 
 Hide unnecessary mode names in mode line.
@@ -102,11 +109,27 @@ Hide unnecessary mode names in mode line.
 
 ** htmlize
 
+D
 #+BEGIN_SRC emacs-lisp
 (use-package htmlize
   :ensure htmlize)
 #+END_SRC
 
+** swiper
+
+#+BEGIN_SRC emacs-lisp
+(use-package counsel
+  :ensure t)
+
+(use-package swiper
+  :ensure t
+  :config (progn
+            (ivy-mode 1)
+            (setq ivy-use-virtual-buffers t)
+            (setq magit-completing-read-function 'ivy-completing-read))
+  :bind (("C-s" . swiper)
+         ("C-c C-r" . ivy-resume)))
+#+END_SRC
 * Editing
 
 ** Turn on auto-fill-mode for text-mode
@@ -126,6 +149,25 @@ Hide unnecessary mode names in mode line.
 (use-package expand-region
   :ensure t
   :bind ("C-=" . er/expand-region))
+#+END_SRC
+** multiple-cursors
+
+#+BEGIN_SRC emacs-lisp
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C-S-c C-S-c" . mc/edit-lines)
+         ("C->" . mc/mark-next-like-this)
+         ("C-<" . mc/mark-previous-like-this)
+         ("C-c C-<" . mc/mark-all-like-this)))
+#+END_SRC
+
+
+** ace-jump-mode
+
+#+BEGIN_SRC emacs-lisp
+(use-package ace-jump-mode
+  :ensure t
+  :bind ("C-." . ace-jump-mode))
 #+END_SRC
 
 * Shell
@@ -227,13 +269,6 @@ Load RedMine tasks into org-mode.
 ;;   :ensure puml-mode)
 #+END_SRC
 
-** ace-jump-mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package ace-jump-mode
-  :ensure t
-  :bind ("C-." . ace-jump-mode))
-#+END_SRC
 
 ** ledger-mode
 
@@ -243,36 +278,12 @@ Load RedMine tasks into org-mode.
   :mode ("\\.ledger\\'" . ledger-mode))
 #+END_SRC
 
-** multiple-cursors
+** C#
 
 #+BEGIN_SRC emacs-lisp
-(use-package multiple-cursors
+(use-package csharp-mode
   :ensure t
-  :bind (("C-S-c C-S-c" . mc/edit-lines)
-         ("C->" . mc/mark-next-like-this)
-         ("C-<" . mc/mark-previous-like-this)
-         ("C-c C-<" . mc/mark-all-like-this)))
-#+END_SRC
-
-** ido
-
-*** ido-mode
-
-#+BEGIN_SRC emacs-lisp
-(use-package ido
-  :config (progn
-            (ido-mode 1)
-            (ido-everywhere 1)))
-#+END_SRC
-
-*** ido-ubiquitous
-
-ido-ubiquitous will enable ido-mode in many places. (e.g. c-h f)
-
-#+BEGIN_SRC emacs-lisp
-(use-package ido-ubiquitous
-  :ensure t
-  :config (ido-ubiquitous-mode 1))
+  :mode ("\\.cs\\'" . csharp-mode))
 #+END_SRC
 
 * Setup theme
@@ -280,7 +291,7 @@ ido-ubiquitous will enable ido-mode in many places. (e.g. c-h f)
 ** Theme
 
 #+BEGIN_SRC emacs-lisp
-(use-package solarized-theme
+(use-package leuven-theme
   :ensure t
   :init
   (load-theme 'leuven t))
