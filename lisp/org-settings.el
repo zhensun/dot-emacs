@@ -3,6 +3,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(org-agenda-auto-exclude-function (quote bh/org-auto-exclude-function))
+ '(org-agenda-cmp-user-defined (quote bh/agenda-sort))
+ '(org-agenda-compact-blocks t)
  '(org-agenda-custom-commands
    (quote
     (("N" "Notes" tags "NOTE"
@@ -37,7 +40,7 @@
 		   (org-agenda-skip-function
 		    (quote bh/skip-projects-and-habits-and-single-tasks))
 		   (org-tags-match-list-sublevels t)
-		   (org-agenda-todo-ignore-scheduled bh/hide-scheduled-and-waiting-next-tasks)
+		   (org-agenda-todo-ignore-scheduled t)
 		   (org-agenda-todo-ignore-deadlines bh/hide-scheduled-and-waiting-next-tasks)
 		   (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
 		   (org-agenda-sorting-strategy
@@ -112,12 +115,15 @@
 	(quote bh/skip-non-archivable-tasks))
        (org-tags-match-list-sublevels nil))))))
  '(org-agenda-default-appointment-duration 60)
- '(org-agenda-files (quote ("~/Documents/radonc.org" "~/org/refile.org")))
+ '(org-agenda-diary-file "~/org/diary.org")
+ '(org-agenda-dim-blocked-tasks nil)
+ '(org-agenda-files (quote ("~/Documents/radonc.org" "~/org")))
  '(org-agenda-fontify-priorities t)
- '(org-agenda-include-diary t)
+ '(org-agenda-include-diary nil)
  '(org-agenda-log-mode-add-notes t)
- '(org-agenda-log-mode-items (quote (closed clock state)))
+ '(org-agenda-log-mode-items (quote (closed state)))
  '(org-agenda-ndays 1)
+ '(org-agenda-persistent-filter t)
  '(org-agenda-prefix-format
    (quote
     ((agenda . "  %-11c%?-12t% s")
@@ -126,19 +132,27 @@
      (tags . "  %-11c"))))
  '(org-agenda-restore-windows-after-quit t)
  '(org-agenda-restriction-lock-highlight-subtree nil)
+ '(org-agenda-skip-additional-timestamps-same-entry nil)
  '(org-agenda-skip-deadline-if-done t)
  '(org-agenda-skip-scheduled-if-deadline-is-shown t)
  '(org-agenda-skip-scheduled-if-done t)
  '(org-agenda-sorting-strategy
    (quote
-    ((agenda habit-down time-up priority-down category-keep)
-     (todo priority-down category-keep)
-     (tags priority-down category-keep)
-     (search category-keep))))
- '(org-agenda-start-on-weekday nil)
+    ((agenda habit-down time-up user-defined-up priority-down effort-up category-keep)
+     (todo category-up priority-down effort-up)
+     (tags category-up priority-down effort-up)
+     (search category-up))))
+ '(org-agenda-start-on-weekday 7)
  '(org-agenda-start-with-log-mode nil)
+ '(org-agenda-tags-column -100)
  '(org-agenda-text-search-extra-files (quote (agenda-archives)))
+ '(org-agenda-time-grid
+   (quote
+    ((daily today remove-match)
+     "----------------"
+     (700 900 1100 1300 1500 1700))))
  '(org-agenda-use-time-grid t)
+ '(org-agenda-window-setup (quote current-window))
  '(org-attach-method (quote mv))
  '(org-babel-load-languages
    (quote
@@ -169,7 +183,7 @@ SCHEDULED: %t
 :ID:       %(shell-command-to-string \"uuidgen\"):CREATED:  %U
 :END:
 
-%a" :prepend t :empty-lines-after 1)
+%a" :prepend t :empty-lines-after 1 :clock-in t :clock-resume t)
      ("m" "Meeting" entry
       (file "~/org/refile.org")
       "* MEETING with %? :MEETING:
@@ -207,19 +221,28 @@ SCHEDULED: %t
 %a
 
 %i" :prepend t :empty-lines 1))))
+ '(org-clock-auto-clock-resolution (quote when-no-clock-is-running) nil nil "Enable auto clock resolution for finding open clocks")
+ '(org-clock-history-length 23)
  '(org-clock-idle-time 10)
  '(org-clock-in-resume t)
- '(org-clock-in-switch-to-state "NEXT")
- '(org-clock-into-drawer "LOGBOOK")
- '(org-clock-persist (quote history))
+ '(org-clock-in-switch-to-state (quote bh/clock-in-to-next))
+ '(org-clock-into-drawer t)
+ '(org-clock-out-remove-zero-time-clocks t)
+ '(org-clock-out-when-done t nil nil "Clock out when moving task to a done state")
+ '(org-clock-persist t)
+ '(org-clock-persist-query-resume nil)
+ '(org-clock-report-include-clocking-task t)
+ '(org-clone-delete-id t)
+ '(org-columns-default-format "%80ITEM(Task) %10Effort(Effort){:} %10CLOCKSUM")
  '(org-completion-use-ido t)
  '(org-cycle-global-at-bob t)
  '(org-deadline-warning-days 30)
  '(org-default-notes-file "~/org/refile.org")
- '(org-ditaa-jar-path "/usr/local/Cellar/ditaa/0.9/libexec/ditaa0_9.jar")
+ '(org-ditaa-eps-jar-path "c:/Users/zsun1/.emacs.d/elpa/contrib/scripts/DitaaEps.jar")
+ '(org-ditaa-jar-path "c:/Users/zsun1/.emacs.d/lisp/ditaa0_9.jar")
  '(org-edit-src-content-indentation 0)
  '(org-enforce-todo-dependencies t)
- '(org-export-backends (quote (ascii beamer html icalendar latex md)))
+ '(org-export-backends (quote (ascii beamer html icalendar latex md texinfo)))
  '(org-export-creator-info nil)
  '(org-export-date-timestamp-format "%Y-%m-%d")
  '(org-export-kill-product-buffer-when-displayed t)
@@ -229,6 +252,10 @@ SCHEDULED: %t
  '(org-export-pdf-remove-logfiles t)
  '(org-extend-today-until 4)
  '(org-fontify-done-headline t)
+ '(org-global-properties
+   (quote
+    (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
+     ("STYLE_ALL" . "habit"))))
  '(org-insert-heading-respect-content nil)
  '(org-latex-pdf-process
    (quote
@@ -239,6 +266,7 @@ SCHEDULED: %t
  '(org-plantuml-jar-path "~/.emacs.d/lisp/plantuml.jar")
  '(org-protocol-outlook-default-template-key (quote z))
  '(org-refile-allow-creating-parent-nodes (quote confirm))
+ '(org-refile-target-verify-function (quote bh/verify-refile-target))
  '(org-refile-targets
    (quote
     ((nil :maxlevel . 9)
@@ -260,9 +288,9 @@ SCHEDULED: %t
      ("HOLD" . 104)
      ("PERSONAL" . 80)
      ("WORK" . 87)
-     ("FARM" . 70)
      ("ORG" . 79)
-     ("CorpIT" . 67)
+     ("ITR" . 73)
+     ("ZHEN" . 122)
      ("crypt" . 69)
      ("NOTE" . 110)
      ("CANCELLED" . 99)
@@ -270,11 +298,11 @@ SCHEDULED: %t
  '(org-todo-keyword-faces
    (quote
     (("NEXT" :inherit font-lock-function-name-face :weight bold)
-     ("WAITING" . "lightblue")
+     ("WAITING" :inherit warning :weight bold)
      ("HOLD" :inherit font-lock-preprocessor-face :weight bold)
-     ("CANCELLED" :inherit org-agenda-done :weight bold)
-     ("MEETING" :inherit org-agenda-done :weight bold)
-     ("PHONE" :inherit org-agenda-done :weight bold))))
+     ("CANCELLED" :inherit org-done :weight bold)
+     ("MEETING" :inherit org-done :weight bold)
+     ("PHONE" :inherit org-done :weight bold))))
  '(org-todo-keywords
    (quote
     ((sequence "TODO(t)" "NEXT(n)" "|" "DONE(d)")
