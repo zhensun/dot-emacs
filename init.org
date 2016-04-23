@@ -104,7 +104,7 @@ Hide unnecessary mode names in mode line.
 
 #+BEGIN_SRC emacs-lisp
 (use-package diminish
-  :ensure diminish)
+  :ensure t)
 #+END_SRC
 
 ** htmlize
@@ -112,15 +112,12 @@ Hide unnecessary mode names in mode line.
 D
 #+BEGIN_SRC emacs-lisp
 (use-package htmlize
-  :ensure htmlize)
+  :ensure t)
 #+END_SRC
 
 ** swiper
 
 #+BEGIN_SRC emacs-lisp
-(use-package counsel
-  :ensure t)
-
 (use-package swiper
   :ensure t
   :config (progn
@@ -128,6 +125,7 @@ D
             (setq ivy-use-virtual-buffers t)
             (setq magit-completing-read-function 'ivy-completing-read))
   :bind (("C-s" . swiper)
+         ("C-x C-f" . counsel-find-file)
          ("C-c C-r" . ivy-resume)))
 
 (use-package counsel
@@ -224,6 +222,14 @@ Close eshell with "x".
   :bind ("C-x g" . magit-status))
 #+END_SRC
 
+** rbt
+
+rbt is the command line tool for ReviewBoard
+
+#+BEGIN_SRC emacs-lisp
+(use-package rbt
+  :ensure t)
+#+END_SRC
 * Modes
 
 ** org
@@ -232,14 +238,13 @@ Close eshell with "x".
 
 #+BEGIN_SRC emacs-lisp
 (use-package org
-  :ensure org-redmine
+  :ensure org
   :mode ("\\.org\\'" . org-mode)
   :commands (org-agenda org-agenda-list org-mode)
   :bind ("<f12>" . org-agenda)
   :config (progn
             (load "init-org")
-            (load "test-org")
-            (setq org-redmine-uri "http://hfhsroweb04:3000/")))
+            (load "test-org")))
 #+END_SRC
 
 *** org-redmine
@@ -293,6 +298,12 @@ Load RedMine tasks into org-mode.
   :mode ("\\.cs\\'" . csharp-mode))
 #+END_SRC
 
+** Powershell
+
+#+BEGIN_SRC emacs-lisp
+(use-package powershell
+  :ensure t)
+#+END_SRC
 * Setup theme
 
 ** Theme
@@ -300,7 +311,7 @@ Load RedMine tasks into org-mode.
 #+BEGIN_SRC emacs-lisp
 (use-package leuven-theme
   :ensure t
-  :init
+  :config
   (load-theme 'leuven t))
 #+END_SRC
 

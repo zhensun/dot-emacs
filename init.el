@@ -35,21 +35,9 @@
 (winner-mode 1)
 
 (use-package diminish
-  :ensure diminish)
+  :ensure t)
 
 (use-package htmlize
-  :ensure htmlize)
-
-;(use-package ido
-;  :config (progn
-;            (ido-mode 1)
-;            (ido-everywhere 1)))
-
-;(use-package ido-ubiquitous
-;  :ensure t
-;  :config (ido-ubiquitous-mode 1))
-
-(use-package counsel
   :ensure t)
 
 (use-package swiper
@@ -59,7 +47,15 @@
             (setq ivy-use-virtual-buffers t)
             (setq magit-completing-read-function 'ivy-completing-read))
   :bind (("C-s" . swiper)
+         ("C-x C-f" . counsel-find-file)
          ("C-c C-r" . ivy-resume)))
+
+(use-package counsel
+  :ensure t
+  :bind (("M-x" . counsel-M-x)))
+
+(use-package hydra
+  :ensure t)
 
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 
@@ -109,15 +105,17 @@ directory to make multiple eshell windows easier."
   :ensure magit
   :bind ("C-x g" . magit-status))
 
+(use-package rbt
+  :ensure t)
+
 (use-package org
-  :ensure org-redmine
+  :ensure org
   :mode ("\\.org\\'" . org-mode)
   :commands (org-agenda org-agenda-list org-mode)
   :bind ("<f12>" . org-agenda)
   :config (progn
             (load "init-org")
-            (load "test-org")
-            (setq org-redmine-uri "http://hfhsroweb04:3000/")))
+            (load "test-org")))
 
 (use-package org-redmine
   :ensure org-redmine
@@ -143,9 +141,12 @@ directory to make multiple eshell windows easier."
   :ensure t
   :mode ("\\.cs\\'" . csharp-mode))
 
+(use-package powershell
+  :ensure t)
+
 (use-package leuven-theme
   :ensure t
-  :init
+  :config
   (load-theme 'leuven t))
 
 (use-package smart-mode-line

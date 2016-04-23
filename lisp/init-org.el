@@ -80,21 +80,6 @@ pdflatex, or xelatex as appropriate, using latexmk."
 (setq org-default-notes-file "~/org/notes.org")
 (define-key global-map "\C-cc" 'org-capture)
 
-;; (defvar org-mode-completion-keys
-;;   '((?d . "DONE")
-;;     (?g . "DELEGATED")
-;;     (?n . "NOTE")
-;;     (?r . "DEFERRED")
-;;     (?s . "STARTED")
-;;     (?t . "TODO")
-;;     (?w . "WAITING")
-;;     (?x . "CANCELED")
-;;     (?y . "SOMEDAY")
-;;     ))
-
-;; (defvar org-todo-state-map nil)
-;; (define-prefix-command 'org-todo-state-map)
-
 ;; if there is a #+ATTR.*: width="200", resize to 200, otherwise
 ;; resize to 400
 (setq org-image-actual-width '(400))
