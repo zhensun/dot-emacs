@@ -58,7 +58,7 @@
 		   (org-agenda-todo-ignore-with-date bh/hide-scheduled-and-waiting-next-tasks)
 		   (org-agenda-sorting-strategy
 		    (quote
-		     (category-keep)))))
+		     (priority-down category-keep)))))
        (tags-todo "-CANCELLED+WAITING/!"
 		  ((org-agenda-overriding-header "Waiting and Postponed Tasks")
 		   (org-agenda-skip-function
@@ -115,9 +115,11 @@
 	(quote bh/skip-non-archivable-tasks))
        (org-tags-match-list-sublevels nil))))))
  '(org-agenda-default-appointment-duration 60)
- '(org-agenda-diary-file "~/org/diary.org")
+ '(org-agenda-diary-file "~/OneDrive - Henry Ford Health System/org/diary.org")
  '(org-agenda-dim-blocked-tasks nil)
- '(org-agenda-files (quote ("~/Documents/radonc.org" "~/org")))
+ '(org-agenda-files
+   (quote
+    ("~/OneDrive - Henry Ford Health System/org" "~/OneDrive/org")))
  '(org-agenda-fontify-priorities t)
  '(org-agenda-include-diary nil)
  '(org-agenda-log-mode-add-notes t)
@@ -144,12 +146,15 @@
      (search category-up))))
  '(org-agenda-start-on-weekday 7)
  '(org-agenda-start-with-log-mode nil)
+ '(org-agenda-sticky t)
  '(org-agenda-tags-column -100)
+ '(org-agenda-tags-todo-honor-ignore-options t)
  '(org-agenda-text-search-extra-files (quote (agenda-archives)))
  '(org-agenda-time-grid
    (quote
     ((daily today remove-match)
-     "----------------"
+     #("----------------" 0 16
+       (org-heading t))
      (700 900 1100 1300 1500 1700))))
  '(org-agenda-use-time-grid t)
  '(org-agenda-window-setup (quote current-window))
@@ -165,10 +170,20 @@
      (dot . t)
      (awk . t))))
  '(org-beamer-theme "Antibes")
+ '(org-blank-before-new-entry (quote ((heading) (plain-list-item . auto))))
  '(org-capture-templates
    (quote
-    (("r" "Respond message" entry
-      (file "~/org/refile.org")
+    (("o" "Outlook" entry
+      (file "~/OneDrive - Henry Ford Health System/org/refile.org")
+      "* NEXT Respond to %:sender on %:title :EMAIL:
+SCHEDULED: %t
+:PROPERTIES:
+:ID:       %(shell-command-to-string \"uuidgen\"):CREATED:  %U
+:END:
+
+%c" :immediate-finish t :empty-lines 1 :clock-in t :clock-resume t)
+     ("r" "Respond message" entry
+      (file "~/OneDrive - Henry Ford Health System/org/refile.org")
       "* NEXT Respond to %:from on %:subject :EMAIL:
 SCHEDULED: %t
 :PROPERTIES:
@@ -177,21 +192,22 @@ SCHEDULED: %t
 
 %a" :immediate-finish t :empty-lines 1 :clock-in t :clock-resume t)
      ("t" "Task" entry
-      (file "~/org/refile.org")
+      (file "~/OneDrive - Henry Ford Health System/org/refile.org")
       "* TODO %?
 :PROPERTIES:
 :ID:       %(shell-command-to-string \"uuidgen\"):CREATED:  %U
 :END:
 
-%a" :prepend t :empty-lines-after 1 :clock-in t :clock-resume t)
+%a
+%i" :prepend t :empty-lines-after 1 :clock-in t :clock-resume t)
      ("m" "Meeting" entry
-      (file "~/org/refile.org")
+      (file "~/OneDrive - Henry Ford Health System/org/refile.org")
       "* MEETING with %? :MEETING:
 :PROPERTIES:
 :ID:       %(shell-command-to-string \"uuidgen\"):CREATED:  %U
 :END:" :empty-lines 1 :clock-in t :clock-resume t)
      ("n" "Note" entry
-      (file "~/org/refile.org")
+      (file "~/OneDrive - Henry Ford Health System/org/refile.org")
       "* %? :NOTE:
 :PROPERTIES:
 :ID:       %(shell-command-to-string \"uuidgen\"):CREATED:  %U
@@ -201,18 +217,18 @@ SCHEDULED: %t
 
 %i" :prepend t :empty-lines 1 :clock-in t :clock-resume t)
      ("p" "Phone call" entry
-      (file "~/org/refile.org")
+      (file "~/OneDrive - Henry Ford Health System/org/refile.org")
       "* PHONE %? :PHONE:
 :PROPERTIES:
 :ID:       %(shell-command-to-string \"uuidgen\"):CREATED:  %U
 :END:" :empty-lines 1 :clock-in t :clock-resume t)
      ("j" "Journal" entry
-      (file+datetree "~/org/diary.org")
+      (file+datetree "~/OneDrive - Henry Ford Health System/org/diary.org")
       "* %?
 %U
 " :clock-in t :clock-resume t)
      ("d" "Devotion Notes" entry
-      (file+datetree "~/org/daily_devotion.org")
+      (file+datetree "~/OneDrive/org/daily_devotion.org")
       "* %?
 :PROPERTIES:
 :ID:       %(shell-command-to-string \"uuidgen\"):CREATED:  %U
@@ -241,6 +257,7 @@ SCHEDULED: %t
  '(org-ditaa-eps-jar-path "c:/Users/zsun1/.emacs.d/elpa/contrib/scripts/DitaaEps.jar")
  '(org-ditaa-jar-path "c:/Users/zsun1/.emacs.d/lisp/ditaa0_9.jar")
  '(org-edit-src-content-indentation 0)
+ '(org-enforce-todo-checkbox-dependencies nil)
  '(org-enforce-todo-dependencies t)
  '(org-export-backends (quote (ascii beamer html icalendar latex md texinfo)))
  '(org-export-creator-info nil)
@@ -250,20 +267,34 @@ SCHEDULED: %t
    (quote
     ("aux" "idx" "log" "out" "toc" "nav" "snm" "vrb" "fls" "fdb_latexmk")))
  '(org-export-pdf-remove-logfiles t)
+ '(org-export-with-sub-superscripts (quote {}))
  '(org-extend-today-until 4)
  '(org-fontify-done-headline t)
+ '(org-format-latex-options
+   (quote
+    (:foreground default :background default :scale 2 :html-foreground "Black" :html-background "Transparent" :html-scale 1.0 :matchers
+		 ("begin" "$1" "$" "$$" "\\(" "\\["))))
  '(org-global-properties
    (quote
     (("Effort_ALL" . "0:15 0:30 0:45 1:00 2:00 3:00 4:00 5:00 6:00 0:00")
      ("STYLE_ALL" . "habit"))))
+ '(org-goto-interface (quote outline-path-completion))
  '(org-insert-heading-respect-content nil)
  '(org-latex-pdf-process
    (quote
     ("pdflatex -interaction nonstopmode -output-directory %o %f" "pdflatex -interaction nonstopmode -output-directory %o %f" "pdflatex -interaction nonstopmode -output-directory %o %f")))
+ '(org-list-demote-modify-bullet (quote (("-" . "+") ("+" . "1."))))
  '(org-log-done (quote note))
+ '(org-log-into-drawer nil)
+ '(org-log-reschedule (quote time))
+ '(org-log-state-notes-insert-after-drawers nil)
+ '(org-modules
+   (quote
+    (org-bbdb org-bibtex org-docview org-gnus org-habit org-id org-info org-irc org-mhe)))
  '(org-outline-path-complete-in-steps nil)
  '(org-outlook-location "C:\\PROGRA~2\\MICROS~2\\OFFICE14\\OUTLOOK.EXE")
  '(org-plantuml-jar-path "~/.emacs.d/lisp/plantuml.jar")
+ '(org-priority-faces (quote ((67 :weight light))))
  '(org-protocol-outlook-default-template-key (quote z))
  '(org-refile-allow-creating-parent-nodes (quote confirm))
  '(org-refile-target-verify-function (quote bh/verify-refile-target))
@@ -293,13 +324,15 @@ SCHEDULED: %t
      ("ZHEN" . 122)
      ("crypt" . 69)
      ("NOTE" . 110)
-     ("CANCELLED" . 99)
-     ("FLAGGED" . 63))))
+     ("CANCELLED" . 99))))
+ '(org-time-clocksum-format
+   (quote
+    (:hours "%d" :require-hours t :minutes ":%02d" :require-minutes t)))
  '(org-todo-keyword-faces
    (quote
-    (("NEXT" :inherit font-lock-function-name-face :weight bold)
+    (("NEXT" :inherit org-next :weight bold)
      ("WAITING" :inherit warning :weight bold)
-     ("HOLD" :inherit font-lock-preprocessor-face :weight bold)
+     ("HOLD" :inherit org-hold :weight bold)
      ("CANCELLED" :inherit org-done :weight bold)
      ("MEETING" :inherit org-done :weight bold)
      ("PHONE" :inherit org-done :weight bold))))
@@ -337,3 +370,10 @@ SCHEDULED: %t
  '(org-use-sub-superscripts "{}")
  '(org-use-tag-inheritance t)
  '(org-yank-adjusted-subtrees t))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(org-hold ((t (:foreground "light slate gray" :weight bold))) t)
+ '(org-next ((t (:inherit gnus-summary-high-ancient))) t))

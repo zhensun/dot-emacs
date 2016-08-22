@@ -9,13 +9,21 @@ This is my emacs's init.d file written in org-mode. I'm taking this as
 a practice for literate programming.
 
 * Enviroment
-
+** Recentf
+#+BEGIN_SRC emacs-lisp
+(when (require 'recentf nil t)
+  (setq recentf-max-saved-items 10000)
+  ;; (setq recentf-auto-cleanup '10)
+  ;; (setq recentf-auto-save-timer
+  ;;       (run-with-idle-timer 30 t 'recentf-save-list))
+  ;; (setq recentf-exclude '("~/.recentf"))
+  (recentf-mode 1))
+#+END_SRC
 ** Paths
 *** Load path
 
 #+BEGIN_SRC emacs-lisp
 (add-to-list 'load-path "~/.emacs.d/site-lisp")
-;;(add-to-list 'load-path "~/.emacs.d/site-lisp/use-package")
 (add-to-list 'load-path "~/.emacs.d/lisp")
 #+END_SRC
 
@@ -44,10 +52,10 @@ instead.
 #+BEGIN_SRC emacs-lisp
 (if (string-equal system-type "windows-nt")
       (add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
+             '("melpa" . "http://melpa.org/packages/"))
   (progn
     (add-to-list 'package-archives
-             '("melpa" . "http://melpa.org/packages/") t)
+             '("melpa" . "http://stable.melpa.org/packages/") t)
     (add-to-list 'package-archives '("marmalade" . "http://marmalade-repo.org/packages/") t)))
 #+END_SRC
 
@@ -65,7 +73,6 @@ Initialize packages.
     (package-install 'use-package))
   (require 'use-package)
 #+END_SRC
-
 ** Load custom file
 
 A lot of customizations can be made using Emacs's customize interface.
@@ -88,9 +95,27 @@ Use init-split to manage settings
 (global-set-key "\C-x\C-m" 'execute-extended-command)
 (global-set-key "\C-c\C-m" 'execute-extended-command)
 #+END_SRC
+** Garbage collection setting
+
+Copied settings from [[http://bling.github.io/blog/2016/01/18/why-are-you-changing-gc-cons-threshold/][Why are you changing gc-cons-threshold?]]
+
+#+BEGIN_SRC emacs-lisp
+(defun my-minibuffer-setup-hook ()
+  (setq gc-cons-threshold most-positive-fixnum))
+
+(defun my-minibuffer-exit-hook ()
+  (setq gc-cons-threshold 800000))
+
+(add-hook 'minibuffer-setup-hook #'my-minibuffer-setup-hook)
+(add-hook 'minibuffer-exit-hook #'my-minibuffer-exit-hook)
+#+END_SRC
 
 * Utilities
-
+** Popup
+#+BEGIN_SRC emacs-lisp
+(use-package popup
+:ensure t)
+#+END_SRC
 ** winner-mode
 
 Undo window layout changes.
@@ -125,27 +150,75 @@ D
             (setq ivy-use-virtual-buffers t)
             (setq magit-completing-read-function 'ivy-completing-read))
   :bind (("C-s" . swiper)
+         ("C-c u" . swiper-all)
          ("C-x C-f" . counsel-find-file)
          ("C-c C-r" . ivy-resume)))
 
 (use-package counsel
   :ensure t
   :bind (("M-x" . counsel-M-x)))
+#+END_SRC
 
+** Hydra
+
+#+BEGIN_SRC emacs-lisp
 (use-package hydra
   :ensure t)
 #+END_SRC
-* Editing
 
+*** Rectango editing
+
+#+BEGIN_SRC emacs-lisp
+(defun ora-ex-point-mark ()
+  (interactive)
+  (if rectangle-mark-mode
+      (exchange-point-and-mark)
+    (let ((mk (mark)))
+      (rectangle-mark-mode 1)
+      (goto-char mk))))
+
+(defhydra hydra-rectangle (:body-pre (rectangle-mark-mode 1)
+                           :color pink
+                           :post (deactivate-mark))
+  "
+  ^_k_^     _d_elete    _s_tring     |\\     ‗,,,--,,‗
+_h_   _l_   _o_k        _y_ank       /,`.-'`'   .‗  \-;;,‗
+  ^_j_^     _n_ew-copy  _r_eset     |,4-  ) )‗   .;.(  `'-'
+^^^^        _e_xchange  _u_ndo     '---''(‗/.‗)-'(‗\‗)
+^^^^        ^ ^         _p_aste
+"
+  ("h" backward-char nil)
+  ("l" forward-char nil)
+  ("k" previous-line nil)
+  ("j" next-line nil)
+  ("e" ora-ex-point-mark nil)
+  ("n" copy-rectangle-as-kill nil)
+  ("d" delete-rectangle nil)
+  ("r" (if (region-active-p)
+           (deactivate-mark)
+         (rectangle-mark-mode 1)) nil)
+  ("y" yank-rectangle nil)
+  ("u" undo nil)
+  ("s" string-rectangle nil)
+  ("p" kill-rectangle nil)
+  ("o" nil nil))
+
+(global-set-key (kbd "C-x SPC") 'hydra-rectangle/body)
+
+#+END_SRC
+
+* Editing
 ** Turn on auto-fill-mode for text-mode
 
 #+BEGIN_SRC emacs-lisp
 (add-hook 'text-mode-hook 'turn-on-auto-fill)
 #+END_SRC
+
 ** Key mapping
 
 #+BEGIN_SRC emacs-lisp
 (global-set-key "\C-w" 'backward-kill-word)
+(global-set-key "\C-x\C-k" 'kill-region)
 #+END_SRC
 
 ** expand-region
@@ -155,6 +228,7 @@ D
   :ensure t
   :bind ("C-=" . er/expand-region))
 #+END_SRC
+
 ** multiple-cursors
 
 #+BEGIN_SRC emacs-lisp
@@ -166,7 +240,6 @@ D
          ("C-c C-<" . mc/mark-all-like-this)))
 #+END_SRC
 
-
 ** ace-jump-mode
 
 #+BEGIN_SRC emacs-lisp
@@ -174,7 +247,17 @@ D
   :ensure t
   :bind ("C-." . ace-jump-mode))
 #+END_SRC
-
+** Show lines and charactors when marked
+#+BEGIN_SRC emacs-lisp
+(defun count-lines-and-chars ()
+  (if mark-active
+      (format "[%3d lines, %4d chars]"
+              (count-lines (region-beginning) (region-end))
+              (- (region-end) (region-beginning)))
+    ""))
+(add-to-list 'default-mode-line-format
+             '(:eval (count-lines-and-chars)))
+#+END_SRC
 * Shell
 
 ** eshell
@@ -230,6 +313,25 @@ rbt is the command line tool for ReviewBoard
 (use-package rbt
   :ensure t)
 #+END_SRC
+* Setup theme
+
+** Theme
+#+BEGIN_SRC emacs-lisp
+  (load-theme 'misterioso t)
+#+END_SRC
+** smart-mode-line
+#+BEGIN_SRC emacs-lisp
+(use-package smart-mode-line
+  :ensure t
+ :config (sml/setup))
+#+END_SRC
+** Chinese font size
+#+BEGIN_SRC emacs-lisp
+(use-package chinese-fonts-setup
+  :ensure t
+  :config
+    (chinese-fonts-setup-enable))
+#+END_SRC
 * Modes
 
 ** org
@@ -238,13 +340,15 @@ rbt is the command line tool for ReviewBoard
 
 #+BEGIN_SRC emacs-lisp
 (use-package org
-  :ensure org
   :mode ("\\.org\\'" . org-mode)
   :commands (org-agenda org-agenda-list org-mode)
   :bind ("<f12>" . org-agenda)
   :config (progn
             (load "init-org")
-            (load "test-org")))
+            (load "test-org")
+            (add-hook 'org-agenda-mode-hook
+                      'hl-line-mode)
+  ))
 #+END_SRC
 
 *** org-redmine
@@ -258,6 +362,13 @@ Load RedMine tasks into org-mode.
   :config (setq org-redmine-uri "http://hfhsroweb04:3000/"))
 #+END_SRC
 
+*** org-outlook
+
+Load org-outlook
+
+#+BEGIN_SRC emacs-lisp
+(use-package org-outlook)
+#+END_SRC
 ** mediawiki
 
 #+BEGIN_SRC emacs-lisp
@@ -281,7 +392,6 @@ Load RedMine tasks into org-mode.
 ;;   :ensure puml-mode)
 #+END_SRC
 
-
 ** ledger-mode
 
 #+BEGIN_SRC emacs-lisp
@@ -299,26 +409,17 @@ Load RedMine tasks into org-mode.
 #+END_SRC
 
 ** Powershell
-
 #+BEGIN_SRC emacs-lisp
 (use-package powershell
   :ensure t)
 #+END_SRC
-* Setup theme
-
-** Theme
-
+** Python
 #+BEGIN_SRC emacs-lisp
-(use-package leuven-theme
+(use-package pyvenv :ensure t :defer t)
+(use-package elpy
   :ensure t
+  :defer t
   :config
-  (load-theme 'leuven t))
-#+END_SRC
-
-** smart-mode-line
-
-#+BEGIN_SRC emacs-lisp
-(use-package smart-mode-line
-  :ensure t
-  :config (sml/setup))
+  (progn
+    (elpy-enable)))
 #+END_SRC

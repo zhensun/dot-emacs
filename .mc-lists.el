@@ -7,9 +7,13 @@
 	c-electric-delete-forward
 	c-electric-semi&comma
 	hydra--negative-argument
+	hydra-rectangle/ora-ex-point-mark
 	indent-for-tab-command
 	ivy-backward-delete-char
+	org-beginning-of-line
 	org-delete-char
+	org-end-of-line
+	org-force-self-insert
 	org-self-insert-command
 	picture-self-insert
 	))
@@ -17,4 +21,6 @@
 (setq mc/cmds-to-run-once
       '(
 	hydra-ivy/ivy-minibuffer-shrink
+	hydra-rectangle/undo
+	org-yank
 	))

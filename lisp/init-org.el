@@ -1,13 +1,11 @@
 ;; Configurations for Org-Mode
 (load "org-settings")
 (require 'org)
-(require 'org-habit)
 (require 'org-agenda)
 (require 'ox-beamer)
 (require 'ox-latex)
 (setq org-export-latex-listings t)
 (setq org-startup-indented t)
-(add-to-list 'auto-mode-alist '("\\.org\\'" . org-mode))
 
 ;; Originally taken from Bruno Tavernier: http://thread.gmane.org/gmane.emacs.orgmode/31150/focus=31432
 ;; but adapted to use latexmk 4.20 or higher.
@@ -70,7 +68,7 @@ pdflatex, or xelatex as appropriate, using latexmk."
                "\\documentclass{scrartcl}"
                ("\\section{%s}" . "\\section*{%s}")
                ("\\subsection{%s}" . "\\subsection*{%s}")
-               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
+gq               ("\\subsubsection{%s}" . "\\subsubsection*{%s}")
                ("\\paragraph{%s}" . "\\paragraph*{%s}")
                ("\\subparagraph{%s}" . "\\subparagraph*{%s}")))
 
@@ -146,6 +144,10 @@ this with to-do items than with projects or headings."
 (use-package orgbox
   :disabled t
   :ensure orgbox)
+
+(use-package org-chinese-utils
+  :ensure t
+  :config (ocus-enable))
 
 (provide 'init-org)
 ;;; init-org ends here
